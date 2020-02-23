@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Chat App</string>
+    <string name="login">Đăng nhập bằng số điện thoại</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="welcome_login">Đăng nhập thôi nào</string>
+    <string name="or">Or</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="chinh_sach">Khi tạo tài khoản mới hoặc đăng nhập, bạn đồng ý với Điều khoản và Chính sách Quyền riêng tư của chúng tôi</string>
+    <string name="dang_ky">Tạo tài khoản mới</string>
+    <string name="todo">TODO</string>
+    <string name="login_facebook">Đăng nhập bằng facebook</string>
+    <string name="su_co_login">Sự cố đăng nhập?</string>
+    <string name="your_phone_number">Nhập số điện thoại</string>
+    <string name="your_password">Nhập mật khẩu</string>
+    <string name="login_now">Đăng nhập nè</string>
+
+
+    // string array
+    <string-array name="advice">
+        <item tools:ignore="TypographyEllipsis,Typos">Mọi thứ... đơn thuần chỉ là chia sẻ và thấu hiểu... hạnh phúc sẽ là mãi mãi.</item>
+        <item>Anh ơi có cháy này! Cháy trong tim em!</item>
+        <item>Thật dễ dàng để quen với một người xa lạ. Nhưng lại khó khăn biết mấy để xa lại với một người đã từng thân quen.</item>
+        <item>Anh gì ơi? Anh đánh rơi người yêu này!</item>
+        <item>Người nắm tay ta theo ta nửa đời phiêu dạt \nTa hôn mắt nàng che nàng nửa kiếp lênh đênh.</item>
+        <item>Vai anh khi có đầu em tựa. Cân cả buồn vui của cuộc đời.</item>
+        <item>Với thế giới, bạn có thể chỉ là một người, nhưng với một người, bạn có thể là cả thế giới.</item>
+        <item>Anh có mỏi chân không khi cứ lượn mãi trong tâm trí em thế?</item>
+        <item>Tình yêu là trạng thái mà khi đó hạnh phúc của một người khác trở nên cực kỳ quan trọng đối với hạnh phúc của bạn.</item>
+
+    </string-array>
+</resources>
