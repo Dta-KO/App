@@ -7,16 +7,17 @@
     <string name="or">Or</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="chinh_sach">Khi tạo tài khoản mới hoặc đăng nhập, bạn đồng ý với Điều khoản và Chính sách Quyền riêng tư của chúng tôi</string>
-    <string name="dang_ky">Tạo tài khoản mới</string>
+    <string name="chinh_sach">Khi đăng nhập, bạn đồng ý với <u>Điều khoản</u> và <u>Chính sách Quyền riêng tư</u> của chúng tôi</string>
+    <string name="dang_ky"><u>Tạo tài khoản mới</u></string>
     <string name="todo">TODO</string>
     <string name="login_facebook">Đăng nhập bằng facebook</string>
-    <string name="su_co_login">Sự cố đăng nhập?</string>
+    <string name="su_co_login"><u>Sự cố đăng nhập?</u></string>
     <string name="your_phone_number">Nhập số điện thoại</string>
     <string name="your_password">Nhập mật khẩu</string>
     <string name="login_now">Đăng nhập nè</string>
+
+
 
 
     // string array
