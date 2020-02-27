@@ -6,9 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -18,14 +18,10 @@ import com.tomer.fadingtextview.FadingTextView;
 
 import java.util.Collections;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     FadingTextView fadingTextView;
     Button btnLoginByPhoneNumber;
-//    //Dialog
-//    Dialog dialogLogin;
-//    Button btnClear, btnLoginNow;
-//    EditText edtPhone;
-//    TextView txtSuCo;
+    ImageView heart1, heart2;
 
     //fire base auth
     FirebaseAuth mAuth;
@@ -45,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
 
         //init button login phone
         setBtnLoginByPhoneNumber();
+
+        //init heart image
+        initImageHeart();
     }
 
     //init button login phone
@@ -76,8 +75,17 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("User", mUser.getPhoneNumber());
                 }
             } else {
-                Log.d("Error", String.valueOf(response.getError()));
+                if (response != null) {
+                    Log.d("Error", String.valueOf(response.getError()));
+                }
             }
         }
+    }
+
+    //init image heart
+    public void initImageHeart() {
+        heart1 = findViewById(R.id.heart1);
+        heart2 = findViewById(R.id.heart2);
+        heart2.setTranslationX(BaseActivity.width);
     }
 }

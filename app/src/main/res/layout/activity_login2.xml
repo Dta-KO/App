@@ -21,6 +21,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:baselineAligned="false">
 
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo"
+            android:visibility="visible"
+            app:srcCompat="@drawable/heart1" />
+
         <FrameLayout
             android:id="@+id/frame2"
             android:layout_width="0dp"
@@ -31,8 +40,9 @@
                 android:id="@+id/heart1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/heart1"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                android:visibility="visible"
+                app:srcCompat="@drawable/heart1" />
         </FrameLayout>
 
         <FrameLayout
@@ -45,8 +55,9 @@
                 android:id="@+id/heart2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/heart2"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                android:translationX="150dp"
+                app:srcCompat="@drawable/heart2" />
         </FrameLayout>
     </LinearLayout>
 
