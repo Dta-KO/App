@@ -17,7 +17,9 @@
     <string name="your_password">Nhập mật khẩu</string>
     <string name="login_now">Đăng nhập nè</string>
 
-
+    //string for facebook
+    <string name="facebook_app_id">2909416592435360</string>
+    <string name="fb_login_protocol_scheme">fb2909416592435360</string>
 
 
     // string array

@@ -8,58 +8,37 @@
     android:background="@drawable/background_login_activity"
     tools:context=".LoginActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/container_img"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/todo"
-        android:weightSum="2"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/txt_chinh_sach"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:baselineAligned="false">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/heart"
-            android:layout_width="0dp"
+            android:id="@+id/heart2"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
             android:contentDescription="@string/todo"
-            android:visibility="visible"
-            app:srcCompat="@drawable/heart1" />
+            android:src="@drawable/heart2"
+            android:visibility="invisible" />
 
-        <FrameLayout
-            android:id="@+id/frame2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/heart1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:contentDescription="@string/todo"
-                android:visibility="visible"
-                app:srcCompat="@drawable/heart1" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/frame1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/heart2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:contentDescription="@string/todo"
-                android:translationX="150dp"
-                app:srcCompat="@drawable/heart2" />
-        </FrameLayout>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/heart1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/heart1"
+            android:translationX="0dp"
+            android:visibility="invisible" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/txt_chinh_sach"

@@ -8,8 +8,8 @@ import android.view.Display;
 import androidx.annotation.Nullable;
 
 public class BaseActivity extends Activity {
-    public static int width;
-    public int height;
+    public static float width;
+    public float height;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
