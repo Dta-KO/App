@@ -1,5 +1,6 @@
 package com.app;
 
+import android.animation.TimeInterpolator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,9 @@ public class LoginActivity extends BaseActivity {
     FirebaseAuth mAuth;
     private static final int RC_SIGN_IN = 101;
     private CallbackManager mCallbackManager;
+
+    public static boolean FIRST_LOGIN_NUMBER_PHONE = false;
+
 
 
     @Override
@@ -140,8 +144,7 @@ public class LoginActivity extends BaseActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
                                 Log.i(TAG, "email" + user.getEmail());
-                                setImageHeart();
-
+                                changeToMainActivity();
                             }
 
                         } else {
@@ -176,6 +179,9 @@ public class LoginActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
+        if(user!=null){
+            changeToMainActivity();
+        }
     }
 
     @Override
@@ -189,20 +195,12 @@ public class LoginActivity extends BaseActivity {
                 FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (mUser != null) {
                     Log.d("User", mUser.getPhoneNumber());
-                    setImageHeart();
-                    try {
-                        Thread.sleep(3000);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    FIRST_LOGIN_NUMBER_PHONE = true;
+                    changeToMainActivity();
+                } else {
+                    if (response != null) {
+                        Log.d("Error", String.valueOf(response.getError()));
                     }
-                }
-            } else {
-                if (response != null) {
-                    Log.d("Error", String.valueOf(response.getError()));
                 }
             }
         }
@@ -213,15 +211,27 @@ public class LoginActivity extends BaseActivity {
         LoginManager.getInstance().logOut();
     }
 
+    public void changeToMainActivity() {
+        setImageHeart();
+    }
+
     //init image heart
     public void setImageHeart() {
         heart1.setVisibility(View.VISIBLE);
         heart2.setVisibility(View.VISIBLE);
         heart2.setTranslationX(BaseActivity.width - heart2.getLayoutParams().width);
         heart1.animate().translationX(BaseActivity.width / 2 - (heart1.getLayoutParams().width >> 1)).withLayer();
-        heart1.animate().setDuration(3000);
-        heart2.animate().translationX(BaseActivity.width / 2).withLayer();
-        heart2.animate().setDuration(3000);
+        heart1.animate().setDuration(1500);
+        heart2.animate().translationX(BaseActivity.width / 2).withLayer().withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        heart2.animate().setDuration(1500);
     }
 
 }

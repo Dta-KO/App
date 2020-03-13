@@ -9,4 +9,17 @@
     <color name="colorRed">#ff0000</color>
     <color name="colorDarkBlue">#000099</color>
     <color name="colorBlack">#000</color>
+    <color name="hintColor">#514949</color>
+    <string-array name="gplus_colors">
+        <item>#00B8D4</item>
+        <item>#00BFA5</item>
+        <item>#64DD17</item>
+        <item>#AEEA00</item>
+        <item>#FFD600</item>
+        <item>#FFAB00</item>
+        <item>#FF6D00</item>
+        <item>#DD2C00</item>
+
+
+    </string-array>
 </resources>

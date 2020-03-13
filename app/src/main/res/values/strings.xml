@@ -20,6 +20,13 @@
     //string for facebook
     <string name="facebook_app_id">2909416592435360</string>
     <string name="fb_login_protocol_scheme">fb2909416592435360</string>
+    <string name="infor_user">Thông tin của bạn</string>
+    <string name="nhap_ten">Tên của bạn</string>
+    <string name="birthday">Sinh nhật của bạn</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="commit">Đồng ý</string>
+
 
 
     // string array

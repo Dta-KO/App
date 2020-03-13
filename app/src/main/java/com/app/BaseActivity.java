@@ -1,9 +1,14 @@
 package com.app;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
@@ -19,5 +24,14 @@ public class BaseActivity extends Activity {
         display.getSize(size);
         width = size.x;
         height = size.y;
+    }
+
+    public void setDialog(Dialog dialog, Context context, int layout) {
+        dialog = new Dialog(context);
+        dialog.setContentView(layout);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
     }
 }

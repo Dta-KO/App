@@ -5,6 +5,7 @@
     package="com.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    
 
     <dist:module dist:instant="true" />
 
@@ -27,8 +28,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
