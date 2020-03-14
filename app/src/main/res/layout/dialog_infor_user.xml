@@ -9,13 +9,29 @@
     android:fitsSystemWindows="true"
     android:padding="5dp">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avtatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_square"
+        app:layout_constraintBottom_toTopOf="@+id/edt_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:text="@string/infor_user"
         android:textColor="@color/colorWhite"
-        android:textSize="30sp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/avtatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:autofillHints=""
@@ -39,7 +55,7 @@
         app:layout_constraintBottom_toTopOf="@+id/edt_birthday"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/avtatar" />
 
     <EditText
         android:id="@+id/edt_birthday"

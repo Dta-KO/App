@@ -27,7 +27,6 @@ public class BaseActivity extends Activity {
     }
 
     public void setDialog(Dialog dialog, Context context, int layout) {
-        dialog = new Dialog(context);
         dialog.setContentView(layout);
         dialog.show();
         Window window = dialog.getWindow();

@@ -29,6 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tomer.fadingtextview.FadingTextView;
 
 import org.json.JSONObject;
@@ -48,7 +50,7 @@ public class LoginActivity extends BaseActivity {
     private static final int RC_SIGN_IN = 101;
     private CallbackManager mCallbackManager;
 
-    public static boolean FIRST_LOGIN_NUMBER_PHONE = false;
+    public static boolean FIRST_LOGIN = false;
 
 
 
@@ -195,7 +197,7 @@ public class LoginActivity extends BaseActivity {
                 FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (mUser != null) {
                     Log.d("User", mUser.getPhoneNumber());
-                    FIRST_LOGIN_NUMBER_PHONE = true;
+
                     changeToMainActivity();
                 } else {
                     if (response != null) {

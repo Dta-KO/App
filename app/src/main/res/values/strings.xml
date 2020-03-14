@@ -16,17 +16,18 @@
     <string name="your_phone_number">Nhập số điện thoại</string>
     <string name="your_password">Nhập mật khẩu</string>
     <string name="login_now">Đăng nhập nè</string>
+    <string name="dien_thieu_infor">Vui lòng nhập đầy đủ thông tin nhé bạn!</string>
 
     //string for facebook
     <string name="facebook_app_id">2909416592435360</string>
     <string name="fb_login_protocol_scheme">fb2909416592435360</string>
-    <string name="infor_user">Thông tin của bạn</string>
+    <string name="infor_user">Cập nhật thông tin</string>
     <string name="nhap_ten">Tên của bạn</string>
     <string name="birthday">Sinh nhật của bạn</string>
     <string name="male">Nam</string>
     <string name="female">Nữ</string>
     <string name="commit">Đồng ý</string>
-
+    <string name="nhap_infor_success">à ha, lộ hết thông tin rồi nhé.</string>
 
 
     // string array
