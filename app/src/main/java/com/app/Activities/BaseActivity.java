@@ -1,4 +1,4 @@
-package com.app;
+package com.app.Activities;
 
 import android.app.Activity;
 import android.app.Dialog;

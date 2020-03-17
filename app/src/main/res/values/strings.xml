@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Chat App</string>
     <string name="login">Đăng nhập bằng số điện thoại</string>
+    <string name="logout">Đăng xuất</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="welcome_login">Đăng nhập thôi nào</string>
@@ -28,6 +29,9 @@
     <string name="female">Nữ</string>
     <string name="commit">Đồng ý</string>
     <string name="nhap_infor_success">à ha, lộ hết thông tin rồi nhé.</string>
+    <string name="drawer_item_home">home</string>
+    <string name="drawer_item_settings">Cài đặt</string>
+    <string name="about">Thông tin về 5Love</string>
 
 
     // string array

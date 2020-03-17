@@ -1,6 +1,5 @@
-package com.app;
+package com.app.Activities;
 
-import android.animation.TimeInterpolator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.app.BuildConfig;
+import com.app.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -49,10 +50,7 @@ public class LoginActivity extends BaseActivity {
     FirebaseAuth mAuth;
     private static final int RC_SIGN_IN = 101;
     private CallbackManager mCallbackManager;
-
-    public static boolean FIRST_LOGIN = false;
-
-
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +59,7 @@ public class LoginActivity extends BaseActivity {
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login2);
         mAuth = FirebaseAuth.getInstance();
+
 
         //init button login facebook
         setBtnLoginFacebook();
@@ -181,7 +180,8 @@ public class LoginActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        if(user!=null){
+        reference = FirebaseDatabase.getInstance().getReference();
+        if (user != null && reference.child("User").child(user.getUid()).equals(user.getUid())) {
             changeToMainActivity();
         }
     }
@@ -208,10 +208,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
-    }
 
     public void changeToMainActivity() {
         setImageHeart();
