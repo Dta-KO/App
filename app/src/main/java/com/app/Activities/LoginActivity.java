@@ -180,8 +180,7 @@ public class LoginActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference();
-        if (user != null && reference.child("User").child(user.getUid()).equals(user.getUid())) {
+        if (user != null) {
             changeToMainActivity();
         }
     }

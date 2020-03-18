@@ -2,7 +2,6 @@ package com.app.Activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,16 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.sdsmdg.tastytoast.TastyToast;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,11 +57,10 @@ public class MainActivity extends BaseActivity {
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        user = new User();
-
         //set first login
-        reference = FirebaseDatabase.getInstance().getReference().child("User");
-        reference.orderByChild("id").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        //get profile and set drawer layout
+        reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
@@ -79,9 +73,6 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-
-        //get profile and set drawer layout
-        reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,7 +89,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    //set dialog for get infor user in first login
+    //set dialog for get information user in first login
     public void setFirstLogin() {
         dialog = new Dialog(this);
         setDialog(dialog, this, R.layout.dialog_infor_user);
@@ -106,7 +97,7 @@ public class MainActivity extends BaseActivity {
         edtBirthday = dialog.findViewById(R.id.edt_birthday);
         rabMale = dialog.findViewById(R.id.male);
         rabFemale = dialog.findViewById(R.id.female);
-        avatar = dialog.findViewById(R.id.avtatar);
+        avatar = dialog.findViewById(R.id.avatar);
 
         btnCommit = dialog.findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +108,7 @@ public class MainActivity extends BaseActivity {
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(birthday)) {
                     TastyToast.makeText(getApplicationContext(), getResources().getString(R.string.dien_thieu_infor), TastyToast.LENGTH_SHORT, TastyToast.WARNING);
                 } else {
+                    user = new User();
                     user.setName(name);
                     user.setBirthday(birthday);
                     if (rabFemale.isChecked()) {
@@ -132,7 +124,7 @@ public class MainActivity extends BaseActivity {
                         }
                     });
 
-                    reference.child(auth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
                             TastyToast.makeText(getApplicationContext(), getResources().getString(R.string.nhap_infor_success),
@@ -154,20 +146,22 @@ public class MainActivity extends BaseActivity {
         SecondaryDrawerItem itemSetting = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_settings).withIcon(R.drawable.ic_settings);
         final SecondaryDrawerItem itemLogout = new SecondaryDrawerItem().withIdentifier(3).withName(R.string.logout).withIcon(R.drawable.ic_exit);
         SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.about).withIcon(R.drawable.ic_info);
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(Drawable.createFromPath(user.getAvt()))
-                .addProfiles(
-                        new ProfileDrawerItem().withName(user.getName()).withEmail(user.getId())
 
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })
-                .build();
+        //default user
+//        AccountHeader headerResult = new AccountHeaderBuilder()
+//                .withActivity(this)
+//                .withHeaderBackground(Drawable.createFromPath(user.getAvt()))
+//                .addProfiles(
+//                        new ProfileDrawerItem().withName(user.getName()).withEmail(user.getId())
+//
+//                )
+//                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+//                    @Override
+//                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+//                        return false;
+//                    }
+//                })
+//                .build();
 
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
@@ -178,7 +172,7 @@ public class MainActivity extends BaseActivity {
                         itemAbout,
                         itemSetting
                 )
-                .withAccountHeader(headerResult)
+//                .withAccountHeader(headerResult)
                 .build();
         result.addStickyFooterItem(itemLogout);
         itemLogout.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -197,7 +191,8 @@ public class MainActivity extends BaseActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
     }
-    public void uploadFile(){
+
+    public void uploadFile() {
 
     }
 
