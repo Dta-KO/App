@@ -1,12 +1,17 @@
 package com.app.Activities;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
@@ -16,6 +21,8 @@ import com.app.R;
 import com.app.model.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
@@ -33,6 +41,9 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.sdsmdg.tastytoast.TastyToast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,6 +59,8 @@ public class MainActivity extends BaseActivity {
     private User user;
     private StorageReference mStorageRef;
     private Uri imgUri;
+    private DatePickerDialog.OnDateSetListener mOnDateSetListener;
+    Uri downloadUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +69,7 @@ public class MainActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         //set first login
         //get profile and set drawer layout
         reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
@@ -98,6 +111,33 @@ public class MainActivity extends BaseActivity {
         rabMale = dialog.findViewById(R.id.male);
         rabFemale = dialog.findViewById(R.id.female);
         avatar = dialog.findViewById(R.id.avatar);
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseFile();
+            }
+        });
+        edtBirthday.setOnClickListener(new View.OnClickListener() {
+            Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DATE);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(year, month, dayOfMonth);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        edtBirthday.setText(simpleDateFormat.format(calendar.getTime()));
+                        edtBirthday.setEnabled(false);
+                    }
+                }, year, month, day);
+                dialog.show();
+
+            }
+        });
 
         btnCommit = dialog.findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(new View.OnClickListener() {
@@ -117,13 +157,7 @@ public class MainActivity extends BaseActivity {
                         user.setSex(getResources().getString(R.string.male));
                     }
                     user.getId();
-                    avatar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            chooseFile();
-                        }
-                    });
-
+                    user.setAvt(String.valueOf(downloadUrl));
                     reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
@@ -192,8 +226,29 @@ public class MainActivity extends BaseActivity {
         startActivityForResult(intent, 1);
     }
 
-    public void uploadFile() {
+    public String getExtension(Uri uri) {
+        ContentResolver resolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(resolver.getType(uri));
+    }
 
+    public void uploadFile() {
+        StorageReference reference = mStorageRef.child(System.currentTimeMillis() + "." + getExtension(imgUri));
+        reference.putFile(imgUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        downloadUrl = taskSnapshot.getUploadSessionUri();
+                        Log.d("url image: ", String.valueOf(downloadUrl));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        TastyToast.makeText(MainActivity.this, getResources().getString(R.string.error), TastyToast.LENGTH_SHORT, TastyToast.ERROR);
+                    }
+                });
     }
 
     @Override
@@ -202,6 +257,7 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
             avatar.setImageURI(imgUri);
+            uploadFile();
         }
     }
 

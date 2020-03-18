@@ -32,6 +32,7 @@
     <string name="drawer_item_home">home</string>
     <string name="drawer_item_settings">Cài đặt</string>
     <string name="about">Thông tin về 5Love</string>
+    <string name="error">Đã xảy ra sự cố!</string>
 
 
     // string array
