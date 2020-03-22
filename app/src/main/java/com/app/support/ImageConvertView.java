@@ -1,4 +1,4 @@
-package com.app.model;
+package com.app.support;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

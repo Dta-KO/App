@@ -1,29 +1,32 @@
-package com.app.Activities;
+package com.app.activities;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.app.R;
 import com.app.model.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,13 +36,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.sdsmdg.tastytoast.TastyToast;
 
 import java.text.SimpleDateFormat;
@@ -60,7 +56,7 @@ public class MainActivity extends BaseActivity {
     private StorageReference mStorageRef;
     private Uri imgUri;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
-    Uri downloadUrl;
+    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,7 @@ public class MainActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
-        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images").child(firebaseUser.getUid());
         //set first login
         //get profile and set drawer layout
         reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
@@ -89,8 +85,10 @@ public class MainActivity extends BaseActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                setDrawerNavigation();
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    setDrawerNavigation(user);
+                }
             }
 
             @Override
@@ -157,7 +155,7 @@ public class MainActivity extends BaseActivity {
                         user.setSex(getResources().getString(R.string.male));
                     }
                     user.getId();
-                    user.setAvt(String.valueOf(downloadUrl));
+                    user.setAvt(String.valueOf(BaseActivity.downloadUrl));
                     reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
@@ -173,83 +171,29 @@ public class MainActivity extends BaseActivity {
 
 
     //setting toàn bộ drawer layout
-    public void setDrawerNavigation() {
-        new DrawerBuilder().withActivity(this).build();
-        //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_home);
-        SecondaryDrawerItem itemSetting = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_settings).withIcon(R.drawable.ic_settings);
-        final SecondaryDrawerItem itemLogout = new SecondaryDrawerItem().withIdentifier(3).withName(R.string.logout).withIcon(R.drawable.ic_exit);
-        SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.about).withIcon(R.drawable.ic_info);
-
-        //default user
-//        AccountHeader headerResult = new AccountHeaderBuilder()
-//                .withActivity(this)
-//                .withHeaderBackground(Drawable.createFromPath(user.getAvt()))
-//                .addProfiles(
-//                        new ProfileDrawerItem().withName(user.getName()).withEmail(user.getId())
-//
-//                )
-//                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-//                    @Override
-//                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-//                        return false;
-//                    }
-//                })
-//                .build();
-
-        Drawer result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar((androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar1))
-                .addDrawerItems(
-                        item,
-                        new DividerDrawerItem(),
-                        itemAbout,
-                        itemSetting
-                )
-//                .withAccountHeader(headerResult)
+    public void setDrawerNavigation(User user) {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_setting, R.id.nav_mini_game)
+                .setDrawerLayout(drawer)
                 .build();
-        result.addStickyFooterItem(itemLogout);
-        itemLogout.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                signOut();
-                return true;
-            }
-        });
-
+        NavController navController = Navigation.findNavController(this, R.id.nav_main_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    public void chooseFile() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_main_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
-    public String getExtension(Uri uri) {
-        ContentResolver resolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(resolver.getType(uri));
-    }
-
-    public void uploadFile() {
-        StorageReference reference = mStorageRef.child(System.currentTimeMillis() + "." + getExtension(imgUri));
-        reference.putFile(imgUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        downloadUrl = taskSnapshot.getUploadSessionUri();
-                        Log.d("url image: ", String.valueOf(downloadUrl));
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        TastyToast.makeText(MainActivity.this, getResources().getString(R.string.error), TastyToast.LENGTH_SHORT, TastyToast.ERROR);
-                    }
-                });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -257,7 +201,7 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
             avatar.setImageURI(imgUri);
-            uploadFile();
+            uploadFile(imgUri, mStorageRef);
         }
     }
 

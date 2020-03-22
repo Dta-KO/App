@@ -1,4 +1,4 @@
-package com.app.Activities;
+package com.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +31,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.tomer.fadingtextview.FadingTextView;
 
 import org.json.JSONObject;

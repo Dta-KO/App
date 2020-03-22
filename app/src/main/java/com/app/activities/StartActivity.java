@@ -1,4 +1,4 @@
-package com.app.Activities;
+package com.app.activities;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
