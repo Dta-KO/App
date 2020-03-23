@@ -7,13 +7,24 @@
             android:icon="@drawable/ic_home"
             android:title="@string/drawer_item_home" />
         <item
-
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_settings"
-            android:title="@string/drawer_item_settings" />
+            android:id="@+id/nav_chat"
+            android:icon="@android:drawable/sym_action_chat"
+            android:title="@string/chat" />
         <item
             android:id="@+id/nav_mini_game"
             android:icon="@drawable/ic_videogame"
             android:title="@string/drawer_mini_game" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/about" />
+        <item
+
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/drawer_item_settings" />
+
     </group>
 </menu>

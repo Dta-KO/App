@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_home"
+    tools:ignore="UnusedNavigation">
     <fragment
         android:id="@+id/nav_home"
         android:name="com.app.navigation.home.HomeFragment"
@@ -23,6 +24,16 @@
         android:name="com.app.navigation.minigame.MiniGameFragment"
         android:label="@string/drawer_mini_game"
         tools:layout="@layout/home_fragment" />
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.app.navigation.chat.ChatFragment"
+        android:label="@string/drawer_chat"
+        tools:layout="@layout/chat_fragment" />
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.app.navigation.about.AboutFragment"
+        android:label="@string/drawer_about"
+        tools:layout="@layout/about_fragment" />
 
 
 </navigation>

@@ -34,6 +34,11 @@
     <string name="about">Thông tin về 5Love</string>
     <string name="error">Đã xảy ra sự cố!</string>
     <string name="drawer_mini_game">Mini game</string>
+    <string name="default_user_name">Anonymous</string>
+    <string name="default_user_description">Kết bạn với mình nha.</string>
+    <string name="chat">Chat</string>
+    <string name="drawer_chat">Chat</string>
+    <string name="drawer_about">About 5 Love</string>
 
 
     // string array
