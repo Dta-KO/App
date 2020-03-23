@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 
 import com.app.R;
 
-public class MiniGame extends Fragment {
+public class MiniGameFragment extends Fragment {
 
     private MiniGameViewModel mViewModel;
 
-    public static MiniGame newInstance() {
-        return new MiniGame();
+    public static MiniGameFragment newInstance() {
+        return new MiniGameFragment();
     }
 
     @Override

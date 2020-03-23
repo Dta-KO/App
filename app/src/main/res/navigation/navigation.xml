@@ -8,17 +8,21 @@
         android:id="@+id/nav_home"
         android:name="com.app.navigation.home.HomeFragment"
         android:label="@string/drawer_item_home"
-        tools:layout="@layout/home_fragment"></fragment>
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_nav_home_self"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/nav_setting"
-        android:name="com.app.navigation.home.HomeFragment"
+        android:name="com.app.navigation.setting.SettingFragment"
         android:label="@string/drawer_item_settings"
-        tools:layout="@layout/setting_fragment"></fragment>
+        tools:layout="@layout/setting_fragment" />
     <fragment
         android:id="@+id/nav_mini_game"
-        android:name="com.app.navigation.home.HomeFragment"
-        android:label="@string/mini_game"
-        tools:layout="@layout/home_fragment"></fragment>
+        android:name="com.app.navigation.minigame.MiniGameFragment"
+        android:label="@string/drawer_mini_game"
+        tools:layout="@layout/home_fragment" />
 
 
 </navigation>
