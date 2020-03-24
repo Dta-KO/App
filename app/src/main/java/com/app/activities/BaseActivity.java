@@ -1,16 +1,12 @@
 package com.app.activities;
 
-import android.app.Activity;
-import android.app.AppComponentFactory;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Window;
@@ -32,8 +28,10 @@ import com.sdsmdg.tastytoast.TastyToast;
 public class BaseActivity extends AppCompatActivity {
     public static float width;
     public float height;
-    public static Uri downloadUrl;
-    public float timeNow;
+    public static String idAvatar;
+    public static final int AVATAR = 1;
+    public static final int BACKGROUND_HEADER = 2;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, AVATAR);
     }
 
     public String getExtension(Uri uri) {
@@ -66,17 +64,15 @@ public class BaseActivity extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(resolver.getType(uri));
     }
 
-    public void uploadFile(Uri imgUri, StorageReference mStorageRef) {
-        timeNow = System.currentTimeMillis();
+    public void uploadFile(final Uri imgUri, StorageReference mStorageRef) {
+        final float idImage = System.currentTimeMillis();
+        StorageReference reference = mStorageRef.child(idImage + getExtension(imgUri));
 
-        StorageReference reference = mStorageRef.child(timeNow + "." + getExtension(imgUri));
         reference.putFile(imgUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        downloadUrl = taskSnapshot.getUploadSessionUri();
-                        Log.d("url image: ", String.valueOf(downloadUrl));
+                        idAvatar = idImage + getExtension(imgUri);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -87,21 +83,15 @@ public class BaseActivity extends AppCompatActivity {
                 });
     }
 
-    public ImageView imageView;
 
-    public Drawable getImageFromUrl(StorageReference mStorage) {
-        StorageReference dateRef = mStorage.child("/" + "1584784329271.png");
-        imageView = new ImageView(getApplicationContext());
+    public void getAvatarFromUrl(final ImageView imageView, StorageReference mStorage, String idImage) {
+        StorageReference dateRef = mStorage.child(idImage);
         dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri downloadUrl) {
-                //do something with downloadurl
-                Glide.with(getApplicationContext()).load(downloadUrl).into(imageView);
-                Log.d("a", String.valueOf(imageView.getDrawable()));
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()).load(uri).into(imageView);
             }
         });
-
-        return imageView.getDrawable();
     }
 
     public int getStatusBarHeight() {

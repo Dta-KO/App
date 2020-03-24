@@ -69,7 +69,7 @@
         android:background="@drawable/stroke"
         android:ems="10"
         android:hint="@string/birthday"
-        android:inputType="textPersonName"
+        android:inputType="date|textPersonName"
         android:padding="5dp"
         android:textColorHint="@color/hintColor"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"

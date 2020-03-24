@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -57,6 +59,7 @@ public class MainActivity extends BaseActivity {
     private Uri imgUri;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
     private AppBarConfiguration mAppBarConfiguration;
+    private ImageView headerImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +103,10 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    public void init() {
+
+    }
+
     //set dialog for get information user in first login
     public void setFirstLogin() {
         dialog = new Dialog(this);
@@ -129,7 +136,6 @@ public class MainActivity extends BaseActivity {
                         calendar.set(year, month, dayOfMonth);
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         edtBirthday.setText(simpleDateFormat.format(calendar.getTime()));
-                        edtBirthday.setEnabled(false);
                     }
                 }, year, month, day);
                 dialog.show();
@@ -155,7 +161,7 @@ public class MainActivity extends BaseActivity {
                         user.setSex(getResources().getString(R.string.male));
                     }
                     user.getId();
-                    user.setAvt(String.valueOf(BaseActivity.downloadUrl));
+                    user.setAvt(String.valueOf(BaseActivity.idAvatar));
                     reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
@@ -188,6 +194,7 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
+        setInformationUserToHeadLayout(user, navigationView);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         navigationView.setPadding(0, getStatusBarHeight(), 0, 0);
@@ -198,6 +205,23 @@ public class MainActivity extends BaseActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_main_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+    }
+
+    public void setInformationUserToHeadLayout(User user, NavigationView view) {
+        View childView = view.getHeaderView(0);
+        headerImg = childView.findViewById(R.id.header_img);
+        TextView headerUserName = childView.findViewById(R.id.header_user_name);
+        TextView headerUserDescription = childView.findViewById(R.id.header_user_description);
+        getAvatarFromUrl(headerImg, mStorageRef, user.getAvt());
+        headerUserName.setText(user.getName());
+        headerUserDescription.setText(user.getBirthday());
+        headerImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseFile();
+            }
+        });
     }
 
 
@@ -212,11 +236,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == BaseActivity.AVATAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imgUri = data.getData();
+            avatar.setImageURI(imgUri);
+            headerImg.setImageURI(imgUri);
+            uploadFile(imgUri, mStorageRef);
+            uploadFile(imgUri, mStorageRef);
+        }
+        if (requestCode == BaseActivity.BACKGROUND_HEADER && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
             avatar.setImageURI(imgUri);
             uploadFile(imgUri, mStorageRef);
         }
+
     }
 
     public void signOut() {
