@@ -52,19 +52,22 @@ public class MainActivity extends BaseActivity {
     private DatabaseReference reference;
     private EditText edtName, edtBirthday;
     private RadioButton rabMale, rabFemale;
-    private CircleImageView avatar;
+    private CircleImageView avatar, headerUserAvatar;
     private Button btnCommit;
     private User user;
     private StorageReference mStorageRef;
     private Uri imgUri;
-    private DatePickerDialog.OnDateSetListener mOnDateSetListener;
     private AppBarConfiguration mAppBarConfiguration;
-    private ImageView headerImg;
+    private ImageView headerUserBackground;
+    private DrawerLayout drawer;
+    private NavigationView navigationView, navigationFooter;
+    private TextView headerUserName, headerUserDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
@@ -104,11 +107,26 @@ public class MainActivity extends BaseActivity {
     }
 
     public void init() {
+        //main activity
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        //navigation main
+        navigationView = findViewById(R.id.nav_view);
+        //navigation footer
+        navigationFooter = findViewById(R.id.nav_footer);
 
+        //for header navigation
+        View childView = navigationView.getHeaderView(0);
+        headerUserAvatar = childView.findViewById(R.id.header_img);
+        headerUserName = childView.findViewById(R.id.header_user_name);
+        headerUserDescription = childView.findViewById(R.id.header_user_description);
+        headerUserBackground = childView.findViewById(R.id.header_background);
     }
 
     //set dialog for get information user in first login
     public void setFirstLogin() {
+        //dialog first login
         dialog = new Dialog(this);
         setDialog(dialog, this, R.layout.dialog_infor_user);
         edtName = dialog.findViewById(R.id.edt_name);
@@ -116,10 +134,12 @@ public class MainActivity extends BaseActivity {
         rabMale = dialog.findViewById(R.id.male);
         rabFemale = dialog.findViewById(R.id.female);
         avatar = dialog.findViewById(R.id.avatar);
+        btnCommit = dialog.findViewById(R.id.btn_commit);
+
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseFile();
+                chooseFile(BaseActivity.AVATAR);
             }
         });
         edtBirthday.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +163,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        btnCommit = dialog.findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,13 +197,6 @@ public class MainActivity extends BaseActivity {
 
     //setting toàn bộ drawer layout
     public void setDrawerNavigation(User user) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //navigation main
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        //navigation footer
-        NavigationView navigationFooter = findViewById(R.id.nav_footer);
         navigationFooter.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -194,7 +206,7 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
-        setInformationUserToHeadLayout(user, navigationView);
+        setInformationUserToHeadLayout(user);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         navigationView.setPadding(0, getStatusBarHeight(), 0, 0);
@@ -208,18 +220,21 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public void setInformationUserToHeadLayout(User user, NavigationView view) {
-        View childView = view.getHeaderView(0);
-        headerImg = childView.findViewById(R.id.header_img);
-        TextView headerUserName = childView.findViewById(R.id.header_user_name);
-        TextView headerUserDescription = childView.findViewById(R.id.header_user_description);
-        getAvatarFromUrl(headerImg, mStorageRef, user.getAvt());
+    public void setInformationUserToHeadLayout(User user) {
+
+        getImageFromUrl(headerUserAvatar, mStorageRef, user.getAvt());
         headerUserName.setText(user.getName());
         headerUserDescription.setText(user.getBirthday());
-        headerImg.setOnClickListener(new View.OnClickListener() {
+        headerUserAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseFile();
+                chooseFile(BaseActivity.HEADER_AVATAR);
+            }
+        });
+        headerUserBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseFile(BaseActivity.BACKGROUND_HEADER);
             }
         });
     }
@@ -239,13 +254,16 @@ public class MainActivity extends BaseActivity {
         if (requestCode == BaseActivity.AVATAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
             avatar.setImageURI(imgUri);
-            headerImg.setImageURI(imgUri);
-            uploadFile(imgUri, mStorageRef);
             uploadFile(imgUri, mStorageRef);
         }
         if (requestCode == BaseActivity.BACKGROUND_HEADER && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
-            avatar.setImageURI(imgUri);
+            headerUserBackground.setImageURI(imgUri);
+            uploadFile(imgUri, mStorageRef);
+        }
+        if (requestCode == BaseActivity.HEADER_AVATAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imgUri = data.getData();
+            headerUserAvatar.setImageURI(imgUri);
             uploadFile(imgUri, mStorageRef);
         }
 

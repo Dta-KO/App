@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +23,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdsmdg.tastytoast.TastyToast;
 
 public class BaseActivity extends AppCompatActivity {
@@ -31,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String idAvatar;
     public static final int AVATAR = 1;
     public static final int BACKGROUND_HEADER = 2;
+    public static final int HEADER_AVATAR = 3;
 
 
     @Override
@@ -51,11 +52,11 @@ public class BaseActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
     }
 
-    public void chooseFile() {
+    public void chooseFile(int requestCode) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, AVATAR);
+        startActivityForResult(intent, requestCode);
     }
 
     public String getExtension(Uri uri) {
@@ -66,25 +67,18 @@ public class BaseActivity extends AppCompatActivity {
 
     public void uploadFile(final Uri imgUri, StorageReference mStorageRef) {
         final float idImage = System.currentTimeMillis();
-        StorageReference reference = mStorageRef.child(idImage + getExtension(imgUri));
-
-        reference.putFile(imgUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        idAvatar = idImage + getExtension(imgUri);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(Exception exception) {
-                        TastyToast.makeText(getApplicationContext(), getResources().getString(R.string.error), TastyToast.LENGTH_SHORT, TastyToast.ERROR);
-                    }
-                });
+        StorageReference reference = mStorageRef.child(idImage + "." + getExtension(imgUri));
+        reference.putFile(imgUri).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                TastyToast.makeText(getApplicationContext(), getResources().getString(R.string.error), TastyToast.LENGTH_SHORT, TastyToast.ERROR);
+            }
+        });
+        idAvatar = idImage + "." + getExtension(imgUri);
     }
 
 
-    public void getAvatarFromUrl(final ImageView imageView, StorageReference mStorage, String idImage) {
+    public void getImageFromUrl(final ImageView imageView, StorageReference mStorage, String idImage) {
         StorageReference dateRef = mStorage.child(idImage);
         dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
