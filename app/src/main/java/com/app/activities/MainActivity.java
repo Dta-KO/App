@@ -24,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.app.R;
+import com.app.model.InforImage;
 import com.app.model.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.sdsmdg.tastytoast.TastyToast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,7 +51,7 @@ public class MainActivity extends BaseActivity {
     private Dialog dialog;
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
-    private DatabaseReference reference;
+    private DatabaseReference mDatabaseRef;
     private EditText edtName, edtBirthday;
     private RadioButton rabMale, rabFemale;
     private CircleImageView avatar, headerUserAvatar;
@@ -62,6 +64,8 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView, navigationFooter;
     private TextView headerUserName, headerUserDescription;
+    private ArrayList<InforImage> listInforImages;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +78,8 @@ public class MainActivity extends BaseActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference("Images").child(firebaseUser.getUid());
         //set first login
         //get profile and set drawer layout
-        reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUser.getUid());
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
@@ -88,7 +92,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-        reference.addValueEventListener(new ValueEventListener() {
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -122,6 +126,9 @@ public class MainActivity extends BaseActivity {
         headerUserName = childView.findViewById(R.id.header_user_name);
         headerUserDescription = childView.findViewById(R.id.header_user_description);
         headerUserBackground = childView.findViewById(R.id.header_background);
+
+        //for list image
+        listInforImages = new ArrayList<>();
     }
 
     //set dialog for get information user in first login
@@ -180,8 +187,7 @@ public class MainActivity extends BaseActivity {
                         user.setSex(getResources().getString(R.string.male));
                     }
                     user.getId();
-                    user.setAvt(String.valueOf(BaseActivity.idAvatar));
-                    reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabaseRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
                             TastyToast.makeText(getApplicationContext(), getResources().getString(R.string.nhap_infor_success),
@@ -222,7 +228,6 @@ public class MainActivity extends BaseActivity {
 
     public void setInformationUserToHeadLayout(User user) {
 
-        getImageFromUrl(headerUserAvatar, mStorageRef, user.getAvt());
         headerUserName.setText(user.getName());
         headerUserDescription.setText(user.getBirthday());
         headerUserAvatar.setOnClickListener(new View.OnClickListener() {
@@ -231,12 +236,23 @@ public class MainActivity extends BaseActivity {
                 chooseFile(BaseActivity.HEADER_AVATAR);
             }
         });
+
         headerUserBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseFile(BaseActivity.BACKGROUND_HEADER);
             }
         });
+
+        //set avatar
+        DatabaseReference avatarRef = mDatabaseRef.child("avatar");
+        StorageReference avatarSto = mStorageRef.child("avatar");
+        getIdLastImage(avatarRef, avatarSto, headerUserAvatar);
+
+        //set background header
+        DatabaseReference backgroundRef = mDatabaseRef.child("backgroundHeader");
+        StorageReference backgroundSto = mStorageRef.child("background_header");
+        getIdLastImage(backgroundRef, backgroundSto, headerUserBackground);
     }
 
 
@@ -251,22 +267,31 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BaseActivity.AVATAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             imgUri = data.getData();
-            avatar.setImageURI(imgUri);
-            uploadFile(imgUri, mStorageRef);
-        }
-        if (requestCode == BaseActivity.BACKGROUND_HEADER && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imgUri = data.getData();
-            headerUserBackground.setImageURI(imgUri);
-            uploadFile(imgUri, mStorageRef);
-        }
-        if (requestCode == BaseActivity.HEADER_AVATAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imgUri = data.getData();
-            headerUserAvatar.setImageURI(imgUri);
-            uploadFile(imgUri, mStorageRef);
-        }
+            switch (requestCode) {
+                case BaseActivity.AVATAR:
+                    avatar.setImageURI(imgUri);
+                    headerUserAvatar.setImageURI(imgUri);
+                    StorageReference imageProfile = mStorageRef.child("avatar");
+                    DatabaseReference avatarRef = mDatabaseRef.child("avatar");
+                    uploadFile(imgUri, imageProfile, avatarRef);
+                    break;
+                case BaseActivity.HEADER_AVATAR:
+                    headerUserAvatar.setImageURI(imgUri);
+                    StorageReference imageProfileHeader = mStorageRef.child("avatar");
+                    DatabaseReference headerRef = mDatabaseRef.child("avatar");
+                    uploadFile(imgUri, imageProfileHeader, headerRef);
+                    break;
+                case BaseActivity.BACKGROUND_HEADER:
+                    headerUserBackground.setImageURI(imgUri);
+                    StorageReference imageBackgroundHeader = mStorageRef.child("background_header");
+                    DatabaseReference backgroundHeaderRef = mDatabaseRef.child("backgroundHeader");
+                    uploadFile(imgUri, imageBackgroundHeader, backgroundHeaderRef);
+                    break;
 
+            }
+        }
     }
 
     public void signOut() {
