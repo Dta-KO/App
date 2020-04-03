@@ -14,17 +14,37 @@ public class User {
     private String id;
     private String tel;
     private String linkFb;
+    private String avt;
+    private String lastMessage;
 
     public User() {
     }
 
-    public User(String name, String birthday, String sex, String id, String tel, String linkFb) {
+    public User(String name, String birthday, String sex, String id, String tel, String linkFb, String avt, String lastMessage) {
         this.name = name;
         this.birthday = birthday;
         this.sex = sex;
         this.id = id;
         this.tel = tel;
         this.linkFb = linkFb;
+        this.avt = avt;
+        this.lastMessage = lastMessage;
+    }
+
+    public String getAvt() {
+        return avt;
+    }
+
+    public void setAvt(String avt) {
+        this.avt = avt;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
     public String getTel() {

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.R;
 import com.app.model.InforImage;
+import com.app.model.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +41,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final int AVATAR = 1;
     public static final int BACKGROUND_HEADER = 2;
     public static final int HEADER_AVATAR = 3;
+    public User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,6 +136,7 @@ public class BaseActivity extends AppCompatActivity {
                 for (DataSnapshot item : key) {
                     InforImage inforImage = item.getValue(InforImage.class);
                     getImageFromUrl(inforImage.idImage, mStorageRef, view);
+
                 }
             }
 
@@ -150,6 +153,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).into(view);
+                user.setAvt(String.valueOf(uri));
             }
         });
     }
