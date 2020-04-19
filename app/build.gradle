@@ -20,6 +20,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    viewBinding {
+        enabled = true
+    }
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {
@@ -54,4 +60,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.1'
     implementation 'info.androidhive:fontawesome:0.0.5'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 }

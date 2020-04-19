@@ -7,7 +7,7 @@
     tools:ignore="UnusedNavigation">
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.app.navigation.home.HomeFragment"
+        android:name="com.app.view.fragments.HomeFragment"
         android:label="@string/drawer_item_home"
         tools:layout="@layout/home_fragment">
         <action
@@ -16,22 +16,22 @@
     </fragment>
     <fragment
         android:id="@+id/nav_setting"
-        android:name="com.app.navigation.setting.SettingFragment"
+        android:name="com.app.view.fragments.SettingFragment"
         android:label="@string/drawer_item_settings"
         tools:layout="@layout/setting_fragment" />
     <fragment
         android:id="@+id/nav_mini_game"
-        android:name="com.app.navigation.minigame.MiniGameFragment"
+        android:name="com.app.view.fragments.MiniGameFragment"
         android:label="@string/drawer_mini_game"
         tools:layout="@layout/home_fragment" />
     <fragment
         android:id="@+id/nav_chat"
-        android:name="com.app.navigation.chat.ChatFragment"
+        android:name="com.app.view.fragments.ChatFragment"
         android:label="@string/drawer_chat"
         tools:layout="@layout/chat_fragment" />
     <fragment
         android:id="@+id/nav_about"
-        android:name="com.app.navigation.about.AboutFragment"
+        android:name="com.app.view.fragments.AboutFragment"
         android:label="@string/drawer_about"
         tools:layout="@layout/about_fragment" />
 

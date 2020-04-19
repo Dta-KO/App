@@ -1,16 +1,16 @@
-package com.app.navigation.setting;
+package com.app.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SettingViewModel extends ViewModel {
+public class MiniGameViewModel extends ViewModel {
     // TODO: Implement the ViewModel
     private MutableLiveData<String> mText;
 
-    public SettingViewModel() {
+    public MiniGameViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is setting fragment");
+        mText.setValue("This is mini game fragment");
     }
 
     public LiveData<String> getText() {

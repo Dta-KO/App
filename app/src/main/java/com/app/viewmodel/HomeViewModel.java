@@ -1,16 +1,19 @@
-package com.app.navigation.minigame;
+package com.app.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class MiniGameViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
     // TODO: Implement the ViewModel
     private MutableLiveData<String> mText;
 
-    public MiniGameViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is mini game fragment");
+    public HomeViewModel(MutableLiveData<String> mText) {
+        this.mText = mText;
+        mText.setValue("This is home fragment");
+    }
+
+    public HomeViewModel() {
     }
 
     public LiveData<String> getText() {

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.R;
-import com.app.activities.ChatActivity;
+import com.app.view.activities.ChatActivity;
 import com.app.model.User;
 import com.bumptech.glide.Glide;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -87,6 +87,7 @@ public class UserAdapter extends UltimateViewAdapter<UserAdapter.CustomViewHolde
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }

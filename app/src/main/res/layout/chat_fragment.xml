@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".navigation.chat.ChatFragment">
+    tools:context=".view.fragments.ChatFragment">
 
     <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
         android:id="@+id/recyclerview_chat"
@@ -17,6 +17,7 @@
         android:layout_marginBottom="8dp"
         android:fitsSystemWindows="true"
         android:isScrollContainer="true"
+        tools:listitem="@layout/item_user"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

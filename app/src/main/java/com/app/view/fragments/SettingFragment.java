@@ -1,4 +1,4 @@
-package com.app.navigation.home;
+package com.app.view.fragments;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -13,25 +13,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.R;
+import com.app.viewmodel.SettingViewModel;
 
-public class HomeFragment extends Fragment {
+public class SettingFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private SettingViewModel mViewModel;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static SettingFragment newInstance() {
+        return new SettingFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        return inflater.inflate(R.layout.setting_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(SettingViewModel.class);
         // TODO: Use the ViewModel
     }
 

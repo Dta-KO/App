@@ -1,4 +1,4 @@
-package com.app.activities;
+package com.app.view.activities;
 
 import android.app.Dialog;
 import android.content.ContentResolver;

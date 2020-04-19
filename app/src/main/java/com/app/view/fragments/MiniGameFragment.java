@@ -1,5 +1,6 @@
-package com.app.navigation.chat;
+package com.app.view.fragments;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -13,26 +14,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.R;
+import com.app.viewmodel.MiniGameViewModel;
 
-public class ChatFragment extends Fragment {
+public class MiniGameFragment extends Fragment {
 
-    private ChatViewModel mViewModel;
+    private MiniGameViewModel mViewModel;
 
-    public static ChatFragment newInstance() {
-        return new ChatFragment();
+    public static MiniGameFragment newInstance() {
+        return new MiniGameFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.chat_fragment, container, false);
+        return inflater.inflate(R.layout.mini_game_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MiniGameViewModel.class);
         // TODO: Use the ViewModel
+        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+            }
+        });
     }
 
 }
