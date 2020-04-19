@@ -1,11 +1,7 @@
 package com.app.model;
 
-import android.net.Uri;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
 
 public class User {
     private String name;
