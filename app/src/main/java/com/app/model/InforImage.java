@@ -1,8 +1,5 @@
 package com.app.model;
 
-import com.google.firebase.database.IgnoreExtraProperties;
-
-@IgnoreExtraProperties
 public class InforImage {
     public int likeCounts;
     public String idImage;
